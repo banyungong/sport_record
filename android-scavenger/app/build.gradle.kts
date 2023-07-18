@@ -67,6 +67,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     implementation("com.alibaba:fastjson:1.2.52")
+    implementation("com.amap.api:3dmap:latest.integration")
+
 }

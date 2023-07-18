@@ -16,10 +16,21 @@ CPoint *Manager::addPoint(CPoint *cPoint) {
     }
     point_list->push_back(*cPoint);
 
-//    //最多保留120个点
-//    if(point_list->size()>60){
-//        point_list->pop_front();
-//    }
+    //最多保留120个点
+    if (point_list->size() > 120) {
+        int i = 0;
+        std::list<CPoint> *temp_point_list = new std::list<CPoint>();
+        for (auto it = point_list->rbegin(); it != point_list->rend(); it++) {
+            if (i >= 60) {
+                break;
+            }
+            temp_point_list->push_front(*it);
+            i++;
+        }
+        point_list->clear();
+        point_list = temp_point_list;
+    }
+    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "point_list length：%d", point_list->size());
     return cPoint;
 }
 
