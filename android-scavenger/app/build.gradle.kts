@@ -10,13 +10,18 @@ android {
     defaultConfig {
         applicationId = "com.gritti.scavenger"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags += ""
+            }
         }
     }
 
@@ -45,6 +50,12 @@ android {
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("../scavenger/src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
         }
     }
 }
