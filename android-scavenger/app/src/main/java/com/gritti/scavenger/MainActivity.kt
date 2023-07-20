@@ -26,6 +26,7 @@ import com.gritti.scavenger.ui.theme.ScavengerTheme
 import java.util.Timer
 import java.util.TimerTask
 import com.gritti.scavenger.R
+import com.gritti.scavenger.model.Point
 
 class MainActivity : ComponentActivity(), LocationListener {
 
@@ -40,6 +41,11 @@ class MainActivity : ComponentActivity(), LocationListener {
     private var orgLatLngs = mutableListOf<LatLng>()
     private var newLatLngs = mutableListOf<LatLng>()
     private var intervalLatLngs = mutableListOf<LatLng>()
+
+    private var tempLatLngs = mutableListOf<Point>()
+    private var rarefyLatLngs = mutableListOf<LatLng>()
+
+
     private var isRunning = false
 
 
@@ -111,10 +117,28 @@ class MainActivity : ComponentActivity(), LocationListener {
                             .coord(LatLng(filter.latitude.toDouble(), filter.longitude.toDouble()))
                             .convert()
                     )
+                    tempLatLngs.add(
+                        filter
+                    )
                     runOnUiThread {
                         tvLocation?.text = "作弊类别：${filter.type}"
                     }
                     if (second % 5 == 1) {
+                        ScavengerManager.getInstance(applicationContext)
+                            .pointRarefy(tempLatLngs.toTypedArray()).forEach {
+                                rarefyLatLngs.add(
+                                    CoordinateConverter(applicationContext).from(CoordinateConverter.CoordType.GPS)
+                                        .coord(
+                                            LatLng(
+                                                it.latitude.toDouble(),
+                                                it.longitude.toDouble()
+                                            )
+                                        )
+                                        .convert()
+                                )
+                            }
+                        tempLatLngs.clear();
+
                         intervalLatLngs.add(
                             orgLatLngs.last()
                         )
@@ -180,6 +204,14 @@ class MainActivity : ComponentActivity(), LocationListener {
                             .width(16f)
                     )
                 }
+
+                if (rarefyLatLngs.isNotEmpty()) {
+                    addPolyline(
+                        PolylineOptions().addAll(rarefyLatLngs).color(Color.YELLOW)
+                            .width(16f)
+                    )
+                }
+
                 if (!isMoveCamera) {
                     isMoveCamera = true
                     moveCamera(

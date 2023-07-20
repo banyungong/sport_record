@@ -3,14 +3,15 @@
 
 #include "PathSmoothTool.h"
 #include "CoordinateUtils.h"
+//#include <android/log.h>
 
-std::list <CPoint> *
-PathSmoothTool::reduceNoisePoint(std::list <CPoint> *inPoints, float threshold) {
+std::list<CPoint> *
+PathSmoothTool::reduceNoisePoint(std::list<CPoint> *inPoints, float threshold) {
 
     if (inPoints == nullptr || inPoints->size() < 3) {
         return inPoints;
     }
-    std::list <CPoint> *outPoints = new std::list<CPoint>();
+    std::list<CPoint> *outPoints = new std::list<CPoint>();
     std::list<CPoint>::iterator it = inPoints->begin();
     CPoint *lastPoint = &(*it);
     outPoints->push_back(*lastPoint);
@@ -19,7 +20,9 @@ PathSmoothTool::reduceNoisePoint(std::list <CPoint> *inPoints, float threshold) 
         CPoint *currentPoint = &(*it);
         double distance = calculateDistanceFromPoint(currentPoint, lastPoint,
                                                      &(*outPoints->rbegin()));
-        if (distance > threshold) {
+//        __android_log_print(ANDROID_LOG_DEBUG, "PathSmoothTool",
+//                            "distance:%f,threshold:%f", distance, threshold);
+        if (distance > 0.02 && distance < threshold) {
             outPoints->push_back(*currentPoint);
             lastPoint = currentPoint;
         }
@@ -57,8 +60,9 @@ double PathSmoothTool::calculateDistanceFromPoint(CPoint *p, CPoint *lineBegin, 
 
 }
 
-std::list <CPoint> *PathSmoothTool::reducerVerticalThreshold(std::list <CPoint> *inPoints, float threshold) {
-    std::list <CPoint> *outPoints = reduceNoisePoint(inPoints, threshold);
+std::list<CPoint> *
+PathSmoothTool::reducerVerticalThreshold(std::list<CPoint> *inPoints, float threshold) {
+    std::list<CPoint> *outPoints = reduceNoisePoint(inPoints, threshold);
     inPoints->clear();
     return outPoints;
 }

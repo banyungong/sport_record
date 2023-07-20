@@ -32,7 +32,7 @@ class MockLocation(private var context: Context?) {
     private fun getLocation1(second: Int): DoubleArray {
         if (data == null) {
             data = mutableListOf()
-            val text: String = read("mock_path2.json") ?: return doubleArrayOf(0.0, 0.0)
+            val text: String = read("mock_path.json") ?: return doubleArrayOf(0.0, 0.0)
             val array: JSONArray = JSON.parseArray(text)
             for (i in 0 until array.size) {
                 val it = array.getJSONArray(i)

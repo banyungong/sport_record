@@ -59,5 +59,19 @@ class ScavengerManager private constructor(context: Context) : ScavengerNative()
         return Point(result[0], result[1] / 1000000f, result[2] / 1000000f, result[3].toInt())
     }
 
+    fun pointRarefy(latlngs: Array<Point>): Array<Point> {
+        val result = pointRarefy(latlngs.map {
+            intArrayOf(
+                it.timestamp.toInt(),
+                (it.latitude * 1000000).toInt(),
+                (it.longitude * 1000000).toInt(),
+                it.type
+            )
+        }.toTypedArray())
+        return result.map {
+            Point(it[0].toLong(), it[1] / 1000000f, it[2] / 1000000f, it[3])
+        }.toTypedArray()
+    }
+
 
 }

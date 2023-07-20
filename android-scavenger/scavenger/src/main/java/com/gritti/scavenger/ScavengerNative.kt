@@ -11,6 +11,8 @@ open class ScavengerNative {
 
     external fun clean()
 
+    external fun pointRarefy(latlngs: Array<IntArray>): Array<IntArray>
+
     companion object {
         init {
             System.loadLibrary("scavenger")
