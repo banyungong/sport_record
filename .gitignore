@@ -1,3 +1,4 @@
 **/Products/
-xcuserdata
+**/xcuserdata
 **/DerivedData/
+**/.DS_Store
