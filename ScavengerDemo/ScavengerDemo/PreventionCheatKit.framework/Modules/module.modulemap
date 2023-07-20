@@ -1,0 +1,6 @@
+framework module PreventionCheatKit {
+  umbrella header "PreventionCheatKit.h"
+
+  export *
+  module * { export * }
+}
