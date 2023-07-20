@@ -9,7 +9,7 @@
 
 #include "cpoint.h"
 
-//CPoint::~CPoint() {
+CPoint::~CPoint() {
 //    delete[] sensorValue;
-//}
+}
 

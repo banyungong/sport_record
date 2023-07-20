@@ -2,11 +2,12 @@
 // Created by liruopeng on 2022/12/9.
 //
 
+//#include <android/log.h>
 #include "CheatSensorHandler.h"
 
-int CheatSensorHandler::onCheatHandler(std::list <SensorValue> *x_value_list,
-                                       std::list <SensorValue> *y_value_list,
-                                       std::list <SensorValue> *z_value_list) {
+int CheatSensorHandler::onCheatHandler(std::list<SensorValue> *x_value_list,
+                                       std::list<SensorValue> *y_value_list,
+                                       std::list<SensorValue> *z_value_list) {
     ///判断波峰波谷时间间隔 10
     ///判断是否绕着一个轴转 20
     ///相邻的波峰波谷之间的平均数，与总平均数是否重合。40
@@ -95,7 +96,7 @@ int CheatSensorHandler::onCheatHandler(std::list <SensorValue> *x_value_list,
     return cheat_index;
 }
 
-bool *CheatSensorHandler::identifyLine(std::list <SensorValue> *values) const {
+bool *CheatSensorHandler::identifyLine(std::list<SensorValue> *values) const {
     if (values->size() <= 10) {
         return new bool[4]{true, false, false, false};
     }
@@ -290,8 +291,8 @@ void CheatSensorHandler::filter_z(float value, long long time_stamp) {
  * 获取最后一分钟内的波峰波点
  * @return
  */
-std::list <SensorValue> *
-CheatSensorHandler::getLastSensorValue(std::list <SensorValue> *all_values) {
+std::list<SensorValue> *
+CheatSensorHandler::getLastSensorValue(std::list<SensorValue> *all_values) {
     auto *valueList = new std::list<SensorValue>;
     if (all_values->empty()) {
         return valueList;
@@ -317,8 +318,10 @@ void CheatSensorHandler::addSensorValue(float x_angle, float y_angle, float z_an
     filter_x(x_angle, time_stamp);
     filter_y(y_angle, time_stamp);
     filter_z(z_angle, time_stamp);
-//    walker_cheat_index = onCheatHandler(getLastSensorValue(x_values), getLastSensorValue(y_values),
-//                                        getLastSensorValue(z_values));
+
+
+
+
 //    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "walker_cheat_index：%d", walker_cheat_index);
 
 }
@@ -340,9 +343,26 @@ void CheatSensorHandler::clean() {
 }
 
 int CheatSensorHandler::computerWalkerCheat() {
+    std::list<SensorValue> *temp_x_list = getLastSensorValue(x_values);
+    std::list<SensorValue> *temp_y_list = getLastSensorValue(y_values);
+    std::list<SensorValue> *temp_z_list = getLastSensorValue(z_values);
+    if (temp_x_list->empty() || temp_y_list->empty() || temp_z_list->empty()) {
+        return 0;
+    }
+    x_values->clear();
+    x_values = temp_x_list;
+    y_values->clear();
+    y_values = temp_y_list;
+    z_values->clear();
+    z_values = temp_z_list;
     int walker_cheat_index = onCheatHandler(getLastSensorValue(x_values),
                                             getLastSensorValue(y_values),
                                             getLastSensorValue(z_values));
+
+
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "x length：%d", x_values->size());
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "y length：%d", y_values->size());
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "z length：%d", z_values->size());
 //    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "walker_cheat_index：%d", walker_cheat_index);
     return walker_cheat_index;
 }

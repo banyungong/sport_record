@@ -4,6 +4,7 @@
 
 #include "default_cheat_handler.h"
 #include "../utils/CoordinateUtils.h"
+//#include <android/log.h>
 
 
 bool DefaultCheatHandler::onHandler(std::list<CPoint> *point_list, CPoint *point) {
@@ -65,6 +66,8 @@ CPoint_TYPE DefaultCheatHandler::checkSpeed() {
     }
     //计算速度
     double pace = 100000.0 / range_distance * range_second;
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "range_distance：%d",range_distance);
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "range_second：%d",range_second);
 
     if (pace < 100) {
         return TYPE_PACE_ERROR1;
@@ -78,6 +81,7 @@ CPoint_TYPE DefaultCheatHandler::checkStep() {
     if (range_second <= 0) {
         return TYPE_NORMAL;
     }
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "range_step：%d",range_step);
 
     //计算步频
     int cadence = 60 * (range_step / range_second);

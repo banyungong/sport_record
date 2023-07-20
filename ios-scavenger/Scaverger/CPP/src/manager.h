@@ -27,7 +27,6 @@ public:
     CPoint *addPoint(CPoint *cPoint);
 
     void clean();
-    
 };
 
 

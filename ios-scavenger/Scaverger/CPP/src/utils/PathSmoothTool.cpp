@@ -2,7 +2,7 @@
 #define SCAVENGER_PATHSMOOTHTOOL_CPP
 
 #include "PathSmoothTool.h"
-#include <CoordinateUtils.h>
+#include "CoordinateUtils.h"
 
 std::list <CPoint> *
 PathSmoothTool::reduceNoisePoint(std::list <CPoint> *inPoints, float threshold) {

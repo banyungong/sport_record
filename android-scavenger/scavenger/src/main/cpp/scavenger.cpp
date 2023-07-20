@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <string>
-#include "src/model/cpoint.h"
-#include "src/manager.h"
+#include "../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.h"
+#include "../../../../../ios-scavenger/Scaverger/CPP/src/manager.h"
 
 static Manager *manager = new Manager();
 

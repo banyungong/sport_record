@@ -27,27 +27,29 @@ project("scavenger")
 # 需要编辑的文件
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        src/utils/CoordinateUtils.h
-        src/utils/CoordinateUtils.cpp
         scavenger.cpp
-        src/model/cpoint.h
-        src/model/cpoint.cpp
-        src/model/sensor_value.h
-        src/model/sensor_value.cpp
-        src/handler/handler.h
-        src/handler/handler.cpp
-        src/handler/kalman_handler.h
-        src/handler/kalman_handler.cpp
-        src/handler/shake_cheat_handler.h
-        src/handler/shake_cheat_handler.cpp
-        src/handler/default_cheat_handler.h
-        src/handler/default_cheat_handler.cpp
-        src/kalman/KalmanTool.h
-        src/kalman/KalmanTool.cpp
-        src/cheat/CheatSensorHandler.h
-        src/cheat/CheatSensorHandler.cpp
-        src/manager.h
-        src/manager.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/CoordinateUtils.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/CoordinateUtils.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/PathSmoothTool.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/PathSmoothTool.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/sensor_value.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/sensor_value.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/handler.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/handler.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/kalman_handler.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/kalman_handler.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/shake_cheat_handler.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/shake_cheat_handler.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/default_cheat_handler.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/default_cheat_handler.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/kalman/KalmanTool.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/kalman/KalmanTool.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/cheat/CheatSensorHandler.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/cheat/CheatSensorHandler.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/manager.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/manager.cpp
         )
 
 # Specifies libraries CMake should link to your target library. You

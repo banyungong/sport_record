@@ -3,6 +3,7 @@
 //
 
 #include "shake_cheat_handler.h"
+//#include <android/log.h>
 
 ShakeCheatHandler::ShakeCheatHandler() {
     cheatSensorHandler = new CheatSensorHandler();
@@ -20,8 +21,6 @@ bool ShakeCheatHandler::onHandler(std::list<CPoint> *point_list, CPoint *point) 
         float y = value[i][1] / 1000000.0;
         float z = value[i][2] / 1000000.0;
         long timestamp = value[i][3];
-//        __android_log_print(ANDROID_LOG_DEBUG, "liruopeng", "x:%f,y:%f,z:%f,timestamp:%ld",
-//                            x, y, z, timestamp);
         cheatSensorHandler->addSensorValue(x, y, z, timestamp);
     }
     if (cheatSensorHandler->computerWalkerCheat() > 40) {

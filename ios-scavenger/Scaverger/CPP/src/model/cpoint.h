@@ -33,7 +33,7 @@ class CPoint {
 private:
 
 public:
-   
+    ~CPoint();
     long long timestamp;
     int latitude;
     int longitude;

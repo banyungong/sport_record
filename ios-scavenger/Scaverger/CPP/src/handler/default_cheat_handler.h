@@ -22,7 +22,6 @@ private:
 
 public:
     bool onHandler(std::list<CPoint> *point_list, CPoint *point) override;
-
     void clean() override;
 };
 

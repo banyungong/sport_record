@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Scavenger"
+rootProject.name = "android-scavenger"
 include(":app")
 include(":scavenger")
