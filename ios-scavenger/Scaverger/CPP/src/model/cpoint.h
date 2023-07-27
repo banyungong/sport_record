@@ -1,6 +1,7 @@
 
 //
 // Created by liruopeng on 2023/6/25.
+// 采集过来的原始点
 //
 
 #ifndef SCAVENGER_CPOINT_H
@@ -34,14 +35,29 @@ private:
 
 public:
     ~CPoint();
-    long long timestamp;
-    int latitude;
-    int longitude;
-    int step;
-    CPoint_TYPE type;
-    long long (*sensorValue)[4];
-    int sensorSize;
 
+    //时间戳，单位秒
+    long long timestamp;
+    //纬度，单位百万分之一度
+    int latitude;
+    //经度，单位百万分之一度
+    int longitude;
+    //累计步数
+    int step;
+    //累计里程
+    int meter;
+    //水平精度，单位厘米
+    int horizontalAccuracy;
+    //垂直精度，单位厘米
+    int verticalAccuracy;
+    //气压高度，单位厘米
+    int baroAltitude;
+    //GPS高度，单位厘米
+    int gpsAltitude;
+    //陀螺仪传感器数据
+    long long (*sensorValue)[4];
+    //陀螺仪传感器的长度
+    int sensorSize;
 };
 
 

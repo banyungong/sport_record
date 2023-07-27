@@ -1,13 +1,12 @@
 package com.gritti.scavenger
 
 import android.content.Context
-import android.util.Log
 import com.gritti.scavenger.model.Point
 import com.gritti.scavenger.seneor.GyroscopeSensorHandler
 import com.gritti.scavenger.seneor.StepSensorHandler
+import java.io.File
 
 class ScavengerManager private constructor(context: Context) : ScavengerNative() {
-
     companion object {
         @Volatile
         private var instance: ScavengerManager? = null
@@ -26,8 +25,14 @@ class ScavengerManager private constructor(context: Context) : ScavengerNative()
 
     private var stepSensorHandler: StepSensorHandler? = null
     private var gyroscopeSensorHandler: GyroscopeSensorHandler? = null
+    private var defaultDir: String
+    private var defaultFileName = "scavenger.json"
+    private var trackSmoothIntensity = 3
+    private var antiCheatingIntensity = 3
 
     init {
+        defaultDir =
+            context.getExternalFilesDir(null)?.absolutePath + File.separator + "scavenger" + File.separator
         stepSensorHandler = StepSensorHandler(context)
         gyroscopeSensorHandler = GyroscopeSensorHandler(context)
     }
@@ -35,9 +40,23 @@ class ScavengerManager private constructor(context: Context) : ScavengerNative()
     fun start() {
         stepSensorHandler?.reset()
         gyroscopeSensorHandler?.reset()
-
         stepSensorHandler?.register()
         gyroscopeSensorHandler?.start()
+        //获取内部存储路径
+        init(defaultDir, defaultFileName, trackSmoothIntensity, antiCheatingIntensity)
+    }
+
+    fun start(
+        dir: String,
+        fileName: String,
+        trackSmoothIntensity: Int,
+        antiCheatingIntensity: Int
+    ) {
+        this.defaultDir = dir
+        this.defaultFileName = fileName
+        this.trackSmoothIntensity = trackSmoothIntensity
+        this.antiCheatingIntensity = antiCheatingIntensity
+        start()
     }
 
     fun stop() {
@@ -47,7 +66,6 @@ class ScavengerManager private constructor(context: Context) : ScavengerNative()
     }
 
     fun filter(timestamp: Long, latitude: Double, longitude: Double): Point {
-        Log.e("liruopeng", "timestamp: $timestamp, latitude: $latitude, longitude: $longitude")
         val result = action(
             timestamp,
             (latitude * 1000000).toInt(),
@@ -56,7 +74,13 @@ class ScavengerManager private constructor(context: Context) : ScavengerNative()
             gyroscopeSensorHandler?.getValues() ?: arrayOf()
         )
 
-        return Point(result[0], result[1] / 1000000f, result[2] / 1000000f, result[3].toInt())
+        return Point(
+            result[0],
+            result[1] / 1000000f,
+            result[2] / 1000000f,
+            result[3].toInt(),
+            result[4].toInt()
+        )
     }
 
     fun pointRarefy(latlngs: Array<Point>): Array<Point> {
@@ -69,7 +93,7 @@ class ScavengerManager private constructor(context: Context) : ScavengerNative()
             )
         }.toTypedArray())
         return result.map {
-            Point(it[0].toLong(), it[1] / 1000000f, it[2] / 1000000f, it[3])
+            Point(it[0].toLong(), it[1] / 1000000f, it[2] / 1000000f, 0, 0)
         }.toTypedArray()
     }
 

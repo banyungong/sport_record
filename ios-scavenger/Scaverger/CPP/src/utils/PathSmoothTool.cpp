@@ -3,32 +3,37 @@
 
 #include "PathSmoothTool.h"
 #include "CoordinateUtils.h"
-//#include <android/log.h>
+#include "android/log.h"
 
 std::list<CPoint> *
 PathSmoothTool::reduceNoisePoint(std::list<CPoint> *inPoints, float threshold) {
-
     if (inPoints == nullptr || inPoints->size() < 3) {
         return inPoints;
     }
-    std::list<CPoint> *outPoints = new std::list<CPoint>();
-    std::list<CPoint>::iterator it = inPoints->begin();
+    auto *outPoints = new std::list<CPoint>();
+    auto it = inPoints->begin();
     CPoint *lastPoint = &(*it);
     outPoints->push_back(*lastPoint);
     it++;
-    for (; it != inPoints->end(); it++) {
+    for (; it != inPoints->end();) {
         CPoint *currentPoint = &(*it);
-        double distance = calculateDistanceFromPoint(currentPoint, lastPoint,
-                                                     &(*outPoints->rbegin()));
-//        __android_log_print(ANDROID_LOG_DEBUG, "PathSmoothTool",
-//                            "distance:%f,threshold:%f", distance, threshold);
-        if (distance > 0.02 && distance < threshold) {
+        CPoint *nextPoint = &(*++it);
+        double distance = calculateDistanceFromPoint(currentPoint, lastPoint, nextPoint);
+        __android_log_print(ANDROID_LOG_INFO, "liruopeng", "distance：%f", distance);
+        if (distance >= 0.1 && distance < threshold) {
             outPoints->push_back(*currentPoint);
-            lastPoint = currentPoint;
+        }
+        lastPoint = *(&currentPoint);
+        if(nextPoint == (&inPoints->back())){
+            break;
         }
     }
+    outPoints->push_back(inPoints->back());
+    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "outPoints length：%d", outPoints->size());
+    inPoints->clear();
     return outPoints;
 }
+
 
 double PathSmoothTool::calculateDistanceFromPoint(CPoint *p, CPoint *lineBegin, CPoint *lineEnd) {
     double a = p->longitude - lineBegin->longitude;
@@ -55,15 +60,12 @@ double PathSmoothTool::calculateDistanceFromPoint(CPoint *p, CPoint *lineBegin, 
     }
 
     return CoordinateUtils::getDistance(p->latitude / 1000000.0, p->longitude / 1000000.0,
-                                        yy / 1000000.0, xx / 1000000.0) / 100.0;
-
-
+                                        yy / 1000000.0, xx / 1000000.0);
 }
 
 std::list<CPoint> *
 PathSmoothTool::reducerVerticalThreshold(std::list<CPoint> *inPoints, float threshold) {
     std::list<CPoint> *outPoints = reduceNoisePoint(inPoints, threshold);
-    inPoints->clear();
     return outPoints;
 }
 

@@ -4,7 +4,7 @@
 #include "handler.h"
 //#include <android/log.h>
 
-bool CHandler::onHandler(std::list <CPoint> *point_list, CPoint *point) {
+bool CHandler::onHandler(std::list <CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) {
     return false;
 }
 

@@ -6,10 +6,12 @@
 #define SCAVENGER_HANDLER_H
 
 #include "../model/cpoint.h"
+#include "../model/result_point.h"
 
 class CHandler {
 public:
-    virtual bool onHandler(std::list<CPoint> *point_list,CPoint *point);
+    virtual bool onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint);
+
     virtual void clean();
 };
 

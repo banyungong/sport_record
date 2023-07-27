@@ -13,16 +13,16 @@ KalmanHandler::~KalmanHandler() {
     kalmanTool = nullptr;
 }
 
-bool KalmanHandler::onHandler(std::list<CPoint> *point_list, CPoint *point) {
+bool KalmanHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) {
     if (point_list->empty()) {
         return false;
     }
-    if (point == nullptr) {
+    if (inPoint == nullptr) {
         return false;
     }
     CPoint *last = &point_list->back();
-    if ((point->timestamp - last->timestamp) <= 5) {
-        kalmanTool->kalmanFilterPoint(last, point);
+    if ((inPoint->timestamp - last->timestamp) <= 5) {
+        kalmanTool->kalmanFilterPoint(last, inPoint,intensity);
     }
     return false;
 }

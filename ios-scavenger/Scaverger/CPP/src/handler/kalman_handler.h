@@ -8,13 +8,19 @@
 #include "handler.h"
 #include "../kalman/KalmanTool.h"
 
-class KalmanHandler : public CHandler{
+class KalmanHandler : public CHandler {
 private:
     KalmanTool *kalmanTool;
 public:
+    int intensity = 3;
+
     KalmanHandler();
+
     ~KalmanHandler();
-    bool onHandler(std::list<CPoint> *point_list,CPoint *point) override;
+
+    bool onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) override;
+
     void clean() override;
 };
+
 #endif //SCAVENGER_KALMAN_HANDLER_H

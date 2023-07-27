@@ -11,17 +11,19 @@
 class DefaultCheatHandler : public CHandler {
 
 private:
-    CPoint_TYPE checkSpeed();
+    CPoint_TYPE checkSpeed() const;
 
-    CPoint_TYPE checkStep();
-
+    CPoint_TYPE checkStep() const;
 
     int range_distance;
     int range_step;
     int range_second;
 
 public:
-    bool onHandler(std::list<CPoint> *point_list, CPoint *point) override;
+    int intensity = 3;
+
+    bool onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) override;
+
     void clean() override;
 };
 

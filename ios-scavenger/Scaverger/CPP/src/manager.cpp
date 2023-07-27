@@ -5,21 +5,27 @@
 #include "manager.h"
 //#include <android/log.h>
 
-CPoint *Manager::addPoint(CPoint *cPoint) {
-    handler = kalmanHandler;
-    handler->onHandler(point_list, cPoint);
-    handler = shakeCheatHandler;
-    handler->onHandler(point_list, cPoint);
-    if (cPoint->type == CPoint_TYPE::TYPE_NORMAL) {
-        handler = defaultCheatHandler;
-        handler->onHandler(point_list, cPoint);
+ResultPoint *Manager::addPoint(CPoint *cPoint) {
+    auto *resultPoint = new ResultPoint();
+    kalmanHandler->onHandler(point_list, cPoint, resultPoint);
+    shakeCheatHandler->onHandler(point_list, cPoint, resultPoint);
+    if (resultPoint->type == CPoint_TYPE::TYPE_NORMAL) {
+        defaultCheatHandler->onHandler(point_list, cPoint, resultPoint);
     }
+    if (resultPoint->type == 0) {
+        mileageHandler->onHandler(point_list, cPoint, resultPoint);
+        paceHandler->onHandler(point_list, cPoint, resultPoint);
+        climbHandler->onHandler(point_list, cPoint, resultPoint);
+        calorieHandler->onHandler(point_list, cPoint, resultPoint);
+    }
+    resultPoint->longitude = cPoint->longitude;
+    resultPoint->latitude = cPoint->latitude;
     point_list->push_back(*cPoint);
-
+    storageHandler->writePoint(resultPoint);
     //最多保留120个点
     if (point_list->size() > 120) {
         int i = 0;
-        std::list<CPoint> *temp_point_list = new std::list<CPoint>();
+        auto *temp_point_list = new std::list<CPoint>();
         for (auto it = point_list->rbegin(); it != point_list->rend(); it++) {
             if (i >= 60) {
                 break;
@@ -30,20 +36,27 @@ CPoint *Manager::addPoint(CPoint *cPoint) {
         point_list->clear();
         point_list = temp_point_list;
     }
-//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "point_list length：%d", point_list->size());
-    return cPoint;
+    return resultPoint;
 }
 
 Manager::Manager() {
     kalmanHandler = new KalmanHandler();
     shakeCheatHandler = new ShakeCheatHandler();
     defaultCheatHandler = new DefaultCheatHandler();
+    mileageHandler = new MileageHandler();
+    paceHandler = new PaceHandler();
+    calorieHandler = new CalorieHandler();
+    climbHandler = new ClimbHandler();
 }
 
 Manager::~Manager() {
     delete kalmanHandler;
     delete shakeCheatHandler;
     delete defaultCheatHandler;
+    delete mileageHandler;
+    delete paceHandler;
+    delete calorieHandler;
+    delete climbHandler;
 //    delete handler;
 }
 
@@ -52,4 +65,37 @@ void Manager::clean() {
     kalmanHandler->clean();
     shakeCheatHandler->clean();
     defaultCheatHandler->clean();
+    mileageHandler->clean();
+    paceHandler->clean();
+    calorieHandler->clean();
+    climbHandler->clean();
+    storageHandler->clean();
+}
+
+//10 20 40 80 150
+void Manager::init(const string &dir, const string &tag, int kalman_intensity,
+                   int shake_intensity) {
+    kalmanHandler->intensity = kalman_intensity;
+    switch (shake_intensity) {
+        case 1:
+            shake_intensity = 30;
+            break;
+        case 2:
+            shake_intensity = 40;
+            break;
+        case 3:
+            shake_intensity = 60;
+            break;
+        case 4:
+            shake_intensity = 80;
+            break;
+        case 5:
+            shake_intensity = 150;
+            break;
+        default:
+            shake_intensity = 60;
+            break;
+    }
+    shakeCheatHandler->intensity = shake_intensity;
+    storageHandler->init(dir, tag);
 }

@@ -10,13 +10,18 @@
 #include "../cheat/CheatSensorHandler.h"
 #include "handler.h"
 
-class ShakeCheatHandler : public virtual CHandler{
+class ShakeCheatHandler : public virtual CHandler {
 private:
     CheatSensorHandler *cheatSensorHandler;
 public:
+    int intensity = 60;
+
     ShakeCheatHandler();
+
     ~ShakeCheatHandler();
-    bool onHandler(std::list<CPoint> *point_list,CPoint *point) override;
+
+    bool onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) override;
+
     void clean() override;
 };
 

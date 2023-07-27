@@ -7,14 +7,14 @@
 //#include <android/log.h>
 
 
-bool DefaultCheatHandler::onHandler(std::list<CPoint> *point_list, CPoint *point) {
+bool DefaultCheatHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) {
     if (point_list->size() < 5) {
         return false;
     }
     //获取point_list中最近10秒内的点
     std::list<CPoint> *recent_point_list = new std::list<CPoint>();
     for (auto it = point_list->rbegin(); it != point_list->rend(); it++) {
-        if (point->timestamp - it->timestamp < 10&&recent_point_list->size()<5) {
+        if (inPoint->timestamp - it->timestamp < 10&&recent_point_list->size()<5) {
             recent_point_list->push_back(*it);
         } else {
             //如果已经超过15秒，就不再继续往前找了
@@ -27,11 +27,11 @@ bool DefaultCheatHandler::onHandler(std::list<CPoint> *point_list, CPoint *point
         return false;
     }
     //计算时间差
-    range_second = point->timestamp - recent_point_list->back().timestamp;
+    range_second = inPoint->timestamp - recent_point_list->back().timestamp;
     //计算步数差
-    range_step = point->step - recent_point_list->back().step;
+    range_step = inPoint->step - recent_point_list->back().step;
     //循环recent_point_list，每格2秒，计算距离差
-    CPoint *_temp_point = point;
+    CPoint *_temp_point = inPoint;
     range_distance = 0;
     for (auto it = recent_point_list->begin(); it != recent_point_list->end(); it++) {
         if (_temp_point->timestamp - it->timestamp >= 2) {
@@ -43,19 +43,19 @@ bool DefaultCheatHandler::onHandler(std::list<CPoint> *point_list, CPoint *point
 
     CPoint_TYPE speedType = checkSpeed();
     if (speedType != TYPE_NORMAL) {
-        point->type = speedType;
+        outPoint->type = speedType;
         return false;
     }
     CPoint_TYPE stepType = checkStep();
     if (stepType != TYPE_NORMAL) {
-        point->type = stepType;
+        outPoint->type = stepType;
         return false;
     }
     recent_point_list->clear();
-    return CHandler::onHandler(point_list, point);
+    return CHandler::onHandler(point_list, inPoint,outPoint);
 }
 
-CPoint_TYPE DefaultCheatHandler::checkSpeed() {
+CPoint_TYPE DefaultCheatHandler::checkSpeed() const {
     //如果时间等于0，退出
     if (range_second <= 0) {
         return TYPE_NORMAL;
@@ -76,7 +76,7 @@ CPoint_TYPE DefaultCheatHandler::checkSpeed() {
     return TYPE_NORMAL;
 }
 
-CPoint_TYPE DefaultCheatHandler::checkStep() {
+CPoint_TYPE DefaultCheatHandler::checkStep() const {
     //如果时间等于0，退出
     if (range_second <= 0) {
         return TYPE_NORMAL;

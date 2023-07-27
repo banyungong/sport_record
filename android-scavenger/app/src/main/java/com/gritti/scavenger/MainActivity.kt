@@ -121,7 +121,8 @@ class MainActivity : ComponentActivity(), LocationListener {
                         filter
                     )
                     runOnUiThread {
-                        tvLocation?.text = "作弊类别：${filter.type}"
+                        tvLocation?.text =
+                            "作弊类别：${filter.type}\n 距离：${filter.meter},时间：${second}"
                     }
                     if (second % 5 == 1) {
                         ScavengerManager.getInstance(applicationContext)
@@ -137,7 +138,7 @@ class MainActivity : ComponentActivity(), LocationListener {
                                         .convert()
                                 )
                             }
-                        tempLatLngs.clear();
+                        tempLatLngs.clear()
 
                         intervalLatLngs.add(
                             orgLatLngs.last()
@@ -216,7 +217,7 @@ class MainActivity : ComponentActivity(), LocationListener {
                     isMoveCamera = true
                     moveCamera(
                         com.amap.api.maps.CameraUpdateFactory.newLatLngZoom(
-                            newLatLngs.last(),
+                            orgLatLngs.last(),
                             19f
                         )
                     )
@@ -260,10 +261,31 @@ class MainActivity : ComponentActivity(), LocationListener {
                 .coord(LatLng(filter.latitude.toDouble(), filter.longitude.toDouble()))
                 .convert()
         )
+        tempLatLngs.add(
+            filter
+        )
         runOnUiThread {
-            tvLocation?.text = "作弊类别：${filter.type}"
+            tvLocation?.text = "作弊类别：${filter.type}\n 距离：${filter.meter}"
         }
         if (orgLatLngs.size % 5 == 1) {
+            ScavengerManager.getInstance(applicationContext)
+                .pointRarefy(tempLatLngs.toTypedArray()).forEach {
+                    rarefyLatLngs.add(
+                        CoordinateConverter(applicationContext).from(CoordinateConverter.CoordType.GPS)
+                            .coord(
+                                LatLng(
+                                    it.latitude.toDouble(),
+                                    it.longitude.toDouble()
+                                )
+                            )
+                            .convert()
+                    )
+                }
+            tempLatLngs.clear()
+
+            intervalLatLngs.add(
+                orgLatLngs.last()
+            )
             drawLine()
         }
     }
