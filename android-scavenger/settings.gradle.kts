@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "android-scavenger"
 include(":app")
 include(":scavenger")
+include(":record_demo")

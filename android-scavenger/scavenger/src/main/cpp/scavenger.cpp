@@ -1,8 +1,8 @@
 #include <jni.h>
 #include <string>
 #include <list>
-#include "../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.h"
 #include "../../../../../ios-scavenger/Scaverger/CPP/src/manager.h"
+#include "../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.h"
 #include "../../../../../ios-scavenger/Scaverger/CPP/src/utils/PathSmoothTool.h"
 
 static Manager *manager = new Manager();
@@ -113,11 +113,11 @@ Java_com_gritti_scavenger_ScavengerNative_pointRarefy(JNIEnv *env, jobject thiz,
     }
     return result;
 }
+
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_gritti_scavenger_ScavengerNative_init(JNIEnv *env, jobject thiz, jstring dir,
-                                               jstring filename, jint track_smooth_intensity,
+Java_com_gritti_scavenger_ScavengerNative_init(JNIEnv *env, jobject thiz,
+                                               jint track_smooth_intensity,
                                                jint anti_cheating_intensity) {
-    manager->init(env->GetStringUTFChars(dir, nullptr), env->GetStringUTFChars(filename, nullptr),
-                  track_smooth_intensity, anti_cheating_intensity);
+    manager->init(track_smooth_intensity, anti_cheating_intensity);
 }

@@ -1,4 +1,4 @@
-package com.gritti.scavenger.seneor
+package com.gritti.scavenger.collection
 
 import android.content.Context
 import android.hardware.Sensor

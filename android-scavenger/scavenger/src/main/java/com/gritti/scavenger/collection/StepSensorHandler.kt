@@ -1,11 +1,10 @@
-package com.gritti.scavenger.seneor
+package com.gritti.scavenger.collection
 
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 
 class StepSensorHandler(context: Context) : SensorEventListener {
     private var mContext: Context = context

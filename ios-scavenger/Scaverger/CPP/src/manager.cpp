@@ -3,7 +3,6 @@
 //
 
 #include "manager.h"
-//#include <android/log.h>
 
 ResultPoint *Manager::addPoint(CPoint *cPoint) {
     auto *resultPoint = new ResultPoint();
@@ -21,7 +20,6 @@ ResultPoint *Manager::addPoint(CPoint *cPoint) {
     resultPoint->longitude = cPoint->longitude;
     resultPoint->latitude = cPoint->latitude;
     point_list->push_back(*cPoint);
-    storageHandler->writePoint(resultPoint);
     //最多保留120个点
     if (point_list->size() > 120) {
         int i = 0;
@@ -57,7 +55,6 @@ Manager::~Manager() {
     delete paceHandler;
     delete calorieHandler;
     delete climbHandler;
-//    delete handler;
 }
 
 void Manager::clean() {
@@ -69,11 +66,10 @@ void Manager::clean() {
     paceHandler->clean();
     calorieHandler->clean();
     climbHandler->clean();
-    storageHandler->clean();
 }
 
 //10 20 40 80 150
-void Manager::init(const string &dir, const string &tag, int kalman_intensity,
+void Manager::init(int kalman_intensity,
                    int shake_intensity) {
     kalmanHandler->intensity = kalman_intensity;
     switch (shake_intensity) {
@@ -97,5 +93,4 @@ void Manager::init(const string &dir, const string &tag, int kalman_intensity,
             break;
     }
     shakeCheatHandler->intensity = shake_intensity;
-    storageHandler->init(dir, tag);
 }

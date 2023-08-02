@@ -1,8 +1,7 @@
 package com.gritti.scavenger
 
 open class ScavengerNative {
-
-    external fun init(dir:String, filename:String, trackSmoothIntensity: Int,antiCheatingIntensity: Int)
+    external fun init(trackSmoothIntensity: Int, antiCheatingIntensity: Int)
 
     external fun action(
         timestamp: Long,

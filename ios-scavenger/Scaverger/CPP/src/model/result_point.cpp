@@ -13,32 +13,34 @@ void ResultPoint::fromJson(string json) {
     Json::Value root;
     root.clear();
     if (reader.parse(json, root)) {
-        second = root["second"].asInt();
-        meter = root["meter"].asInt();
-        pace = root["pace"].asInt();
-        step = root["step"].asInt();
-        altitude = root["altitude"].asInt();
-        latitude = root["latitude"].asInt();
-        longitude = root["longitude"].asInt();
-        calorie = root["calorie"].asInt();
-        type = root["type"].asInt();
+        second = root["a"].asInt();
+        meter = root["b"].asInt();
+        pace = root["c"].asInt();
+        step = root["d"].asInt();
+        altitude = root["e"].asInt();
+        latitude = root["f"].asInt();
+        longitude = root["g"].asInt();
+        calorie = root["h"].asInt();
+        climb = root["i"].asInt();
+        type = root["j"].asInt();
     }
     root.clear();
     json.clear();
 }
 
-string ResultPoint::toJson() {
+string ResultPoint::toJson() const {
     Json::Value root;
     root.clear();
-    root["second"] = second;
-    root["meter"] = meter;
-    root["pace"] = pace;
-    root["step"] = step;
-    root["altitude"] = altitude;
-    root["latitude"] = latitude;
-    root["longitude"] = longitude;
-    root["calorie"] = calorie;
-    root["type"] = type;
+    root["a"] = second;
+    root["b"] = meter;
+    root["c"] = pace;
+    root["d"] = step;
+    root["e"] = altitude;
+    root["f"] = latitude;
+    root["g"] = longitude;
+    root["h"] = calorie;
+    root["i"] = climb;
+    root["j"] = type;
     Json::FastWriter writer;
     string strWrite = writer.write(root);
     root.clear();

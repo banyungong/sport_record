@@ -28,6 +28,7 @@ project("scavenger")
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         scavenger.cpp
+        record_service_interface.cpp
         ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/assertions.h
         ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/autolink.h
         ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/config.h
@@ -55,6 +56,10 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         ../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.cpp
         ../../../../../ios-scavenger/Scaverger/CPP/src/model/sensor_value.h
         ../../../../../ios-scavenger/Scaverger/CPP/src/model/sensor_value.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/crecord.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/crecord.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/km_node.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/model/km_node.cpp
         ../../../../../ios-scavenger/Scaverger/CPP/src/handler/handler.h
         ../../../../../ios-scavenger/Scaverger/CPP/src/handler/handler.cpp
         ../../../../../ios-scavenger/Scaverger/CPP/src/handler/kalman_handler.h
@@ -77,8 +82,12 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         ../../../../../ios-scavenger/Scaverger/CPP/src/handler/mileage_handler.cpp
         ../../../../../ios-scavenger/Scaverger/CPP/src/manager.h
         ../../../../../ios-scavenger/Scaverger/CPP/src/manager.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/record_service.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/record_service.cpp
         ../../../../../ios-scavenger/Scaverger/CPP/src/model/result_point.h
         ../../../../../ios-scavenger/Scaverger/CPP/src/model/result_point.cpp
+        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/timer.h
+        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/timer.cpp
         )
 
 # Specifies libraries CMake should link to your target library. You

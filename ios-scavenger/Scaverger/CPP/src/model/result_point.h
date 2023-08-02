@@ -12,7 +12,7 @@ using namespace std;
 
 class ResultPoint {
 public:
-    int second = 0;
+    long long second = 0;
     int meter = 0;
     int pace = 9999;
     int step = 0;
@@ -20,9 +20,10 @@ public:
     int latitude;
     int longitude;
     int calorie = 0;
+    int climb = 0;
     int type;
 
-    string toJson();
+    string toJson() const;
 
     void fromJson(string json);
 

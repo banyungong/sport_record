@@ -18,7 +18,6 @@
 #include "storage/storage_handler.h"
 
 class Manager {
-
 private:
     std::list<CPoint> *point_list = new std::list<CPoint>;
     //卡尔曼优化
@@ -35,8 +34,6 @@ private:
     ClimbHandler *climbHandler;
     //计算配速
     PaceHandler *paceHandler;
-    //数据持久化
-    StorageHandler *storageHandler = new StorageHandler();
 
 public:
     Manager();
@@ -52,7 +49,7 @@ public:
      * @param kalman_intensity 卡尔曼滤波强度1-5
      * @param shake_intensity 默认作弊强度1-5
      */
-    void init(const string &dir, const string &tag, int kalman_intensity, int shake_intensity);
+    void init(int kalman_intensity, int shake_intensity);
 
     void clean();
 };

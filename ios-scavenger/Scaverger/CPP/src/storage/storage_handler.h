@@ -12,12 +12,15 @@
 #include "list"
 #include "../model/result_point.h"
 #include "mmap/mmfile.h"
+#include "../model/crecord.h"
 
 using namespace std;
 
 class StorageHandler {
 private:
-    MMFile *mmfile = new MMFile();
+    MMFile *pointMMFile = new MMFile();
+    MMFile *recordMMFile = new MMFile();
+
     list<ResultPoint> *point_list = new list<ResultPoint>;
 public:
     /**
@@ -28,20 +31,24 @@ public:
      */
     void init(string dir, string tag);
 
-    /**
-     * 追加写入数据
-     * @param point_list
-     * @return
-     */
-    void append_write();
 
-    void writePoint(ResultPoint *point);
+    void writePoint(ResultPoint *point, bool force);
 
     /**
-     * 读取数据
+     * 读取点数据
      * @return
      */
-    list<ResultPoint> read();
+    list<ResultPoint> *readPointList();
+
+
+
+    void writeRecord(CRecord *point);
+
+    /**
+     * 读取记录汇总数据
+     * @return
+     */
+    CRecord * readRecord();
 
     void clean();
 
