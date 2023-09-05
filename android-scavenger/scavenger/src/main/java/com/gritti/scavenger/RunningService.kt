@@ -61,13 +61,7 @@ class RunningService : Service(), TimerControls.onTimerListener {
     }
 
     override fun onTimer(second: Int) {
-        val point = ScavengerManager.getInstance(this).filter()
-        RecordManager.getInstance(this).addPoint(
-            point.timestamp.toInt(), point.meter, point.pace, point.step,
-            (point.altitude * 1000000).toInt(),
-            (point.latitude * 1000000).toInt(),
-            (point.longitude * 1000000).toInt(), point.calorie, point.climb, point.type
-        )
+        val point = ScavengerManager.getInstance(this).addPoint()
     }
 
 }

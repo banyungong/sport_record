@@ -25,7 +25,6 @@ import com.gritti.scavenger.mock.MockLocation
 import com.gritti.scavenger.ui.theme.ScavengerTheme
 import java.util.Timer
 import java.util.TimerTask
-import com.gritti.scavenger.R
 import com.gritti.scavenger.model.Point
 
 class MainActivity : ComponentActivity(), LocationListener {
@@ -96,7 +95,7 @@ class MainActivity : ComponentActivity(), LocationListener {
     private fun autoStart() {
         isRunning = true
         val mockLocation = MockLocation(this)
-        ScavengerManager.getInstance(this.applicationContext).start()
+        ScavengerManager.getInstance(this.applicationContext).startRecord()
         timer = Timer()
         timer?.schedule(
             object : TimerTask() {
@@ -107,7 +106,7 @@ class MainActivity : ComponentActivity(), LocationListener {
                             .coord(LatLng(location.latitude, location.longitude)).convert()
                     )
                     val filter =
-                        ScavengerManager.getInstance(this@MainActivity.applicationContext).filter(
+                        ScavengerManager.getInstance(this@MainActivity.applicationContext).addPoint(
                             second.toLong(),
                             location.latitude,
                             location.longitude,
@@ -157,7 +156,7 @@ class MainActivity : ComponentActivity(), LocationListener {
     private fun stop() {
         isRunning = false
         timer?.cancel()
-        ScavengerManager.getInstance(this.applicationContext).stop()
+        ScavengerManager.getInstance(this.applicationContext).stopRecord()
         isMoveCamera = false
         mLocationManager?.removeUpdates { }
         updateControl()
@@ -251,7 +250,7 @@ class MainActivity : ComponentActivity(), LocationListener {
                 .coord(LatLng(location.latitude, location.longitude)).convert()
         )
         val filter =
-            ScavengerManager.getInstance(this@MainActivity.applicationContext).filter(
+            ScavengerManager.getInstance(this@MainActivity.applicationContext).addPoint(
                 System.currentTimeMillis() / 1000,
                 location.latitude,
                 location.longitude,

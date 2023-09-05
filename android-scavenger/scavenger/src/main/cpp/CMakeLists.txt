@@ -24,72 +24,17 @@ project("scavenger")
 # System.loadLibrary() and pass the name of the library defined here;
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
-# 需要编辑的文件
-add_library(${CMAKE_PROJECT_NAME} SHARED
-        # List C/C++ source files with relative paths to this CMakeLists.txt.
-        scavenger.cpp
-        record_service_interface.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/assertions.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/autolink.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/config.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/features.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/forwards.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/json.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/json_reader.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/json_tool.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/json_value.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/json_valueiterator.inl
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/json_writer.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/reader.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/value.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/version.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/json/writer.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/mmap/mmfile.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/mmap/mmfile.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/storage_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/storage/storage_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/CoordinateUtils.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/CoordinateUtils.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/PathSmoothTool.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/PathSmoothTool.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/cpoint.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/sensor_value.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/sensor_value.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/crecord.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/crecord.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/km_node.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/km_node.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/kalman_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/kalman_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/shake_cheat_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/shake_cheat_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/default_cheat_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/default_cheat_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/pace_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/pace_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/climb_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/climb_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/calorie_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/calorie_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/kalman/KalmanTool.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/kalman/KalmanTool.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/cheat/CheatSensorHandler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/cheat/CheatSensorHandler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/mileage_handler.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/handler/mileage_handler.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/manager.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/manager.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/record_service.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/record_service.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/result_point.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/model/result_point.cpp
-        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/timer.h
-        ../../../../../ios-scavenger/Scaverger/CPP/src/utils/timer.cpp
-        )
+# 需要编辑的所有文件
+set(SRC_DIR "../../../../../ios-scavenger/Scaverger/CPP/src")
+message("src dir: ${SRC_DIR}")
 
+file(GLOB_RECURSE SRC_LIST ${SRC_DIR}/*.h ${SRC_DIR}/*.cpp)
+message("SRC_LIST:${SRC_LIST}")
+
+add_library(${CMAKE_PROJECT_NAME} SHARED
+        scavenger.cpp
+        ${SRC_LIST}
+        )
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.

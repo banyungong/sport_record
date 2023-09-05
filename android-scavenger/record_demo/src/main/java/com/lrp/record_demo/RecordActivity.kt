@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.gritti.scavenger.RecordManager
+import com.gritti.scavenger.ScavengerManager
 import com.lrp.record_demo.databinding.ActivityRecordBinding
 import com.lrp.record_demo.vm.RecordVM
 
@@ -26,11 +26,11 @@ class RecordActivity : AppCompatActivity() {
         }
         dataBinding.btnPauseOrContinue.setOnClickListener {
             // 暂停或继续
-            if (RecordManager.getInstance(this).getSportRecord().status == 2) {
-                RecordManager.getInstance(this).pauseRecord()
+            if (ScavengerManager.getInstance(this).getSportRecord().status == 2) {
+                ScavengerManager.getInstance(this).pauseRecord()
                 dataBinding.btnPauseOrContinue.text = "继续"
-            } else if (RecordManager.getInstance(this).getSportRecord().status == 3) {
-                RecordManager.getInstance(this).resumeRecord()
+            } else if (ScavengerManager.getInstance(this).getSportRecord().status == 3) {
+                ScavengerManager.getInstance(this).resumeRecord()
             }
         }
         dataBinding.tvDistance.text = recordVM.distanceMutableLiveData.value

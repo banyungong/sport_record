@@ -3,11 +3,11 @@ package com.lrp.record_demo.vm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.gritti.scavenger.RecordManager
+import com.gritti.scavenger.ScavengerManager
+import com.gritti.scavenger.controls.IRecordLifecycle
 import com.gritti.scavenger.model.SportRecord
 
-class RecordVM(application: Application) : AndroidViewModel(application),
-    RecordManager.OnRecordListener {
+class RecordVM(application: Application) : AndroidViewModel(application), IRecordLifecycle {
     val distanceMutableLiveData = MutableLiveData<String>()
     val secondMutableLiveData = MutableLiveData<String>()
     val speedMutableLiveData = MutableLiveData<String>()
@@ -24,12 +24,28 @@ class RecordVM(application: Application) : AndroidViewModel(application),
         climbMutableLiveData.value = "0m"
         stepMutableLiveData.value = "0Step"
         stepFrequencyMutableLiveData.value = "0/min"
-        RecordManager.getInstance(application).addListener(this)
+        ScavengerManager.getInstance(application).registerLifecycle(this)
     }
 
     override fun onCleared() {
         super.onCleared()
-        RecordManager.getInstance(getApplication()).removeListener(this)
+        ScavengerManager.getInstance(getApplication()).unRegisterLifecycle(this)
+    }
+
+    override fun onStart() {
+
+    }
+
+    override fun onPause() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onResume() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onStop() {
+        TODO("Not yet implemented")
     }
 
     override fun onUpdateRecord(record: SportRecord) {
@@ -50,5 +66,6 @@ class RecordVM(application: Application) : AndroidViewModel(application),
         stepMutableLiveData.value = String.format("%dStep", record.step)
         stepFrequencyMutableLiveData.value = String.format("%d/min", record.step)
     }
+
 
 }

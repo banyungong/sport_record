@@ -1,6 +1,9 @@
 package com.gritti.scavenger.model
 
-class SportRecord {
+import android.os.Parcel
+import android.os.Parcelable
+
+class SportRecord() : Parcelable {
     //记录id
     var recordId: String = ""
 
@@ -39,5 +42,45 @@ class SportRecord {
 
     //公里节点
     var kmNodeList = ArrayList<KMNode>()
+
+    constructor(parcel: Parcel) : this() {
+        recordId = parcel.readString().toString()
+        status = parcel.readInt()
+        duration = parcel.readInt()
+        startTime = parcel.readLong()
+        endTime = parcel.readLong()
+        mileage = parcel.readInt()
+        speed = parcel.readInt()
+        step = parcel.readInt()
+        calorie = parcel.readInt()
+        climb = parcel.readInt()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(recordId)
+        parcel.writeInt(status)
+        parcel.writeInt(duration)
+        parcel.writeLong(startTime)
+        parcel.writeLong(endTime)
+        parcel.writeInt(mileage)
+        parcel.writeInt(speed)
+        parcel.writeInt(step)
+        parcel.writeInt(calorie)
+        parcel.writeInt(climb)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<SportRecord> {
+        override fun createFromParcel(parcel: Parcel): SportRecord {
+            return SportRecord(parcel)
+        }
+
+        override fun newArray(size: Int): Array<SportRecord?> {
+            return arrayOfNulls(size)
+        }
+    }
 
 }
