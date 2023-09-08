@@ -6,37 +6,37 @@ import java.util.TimerTask
 class TimerControls {
 
     private var second = 0
-    private val mTimer: Timer by lazy {
-        Timer()
-    }
+    private var mTimer: Timer? = null
 
-    private var mListeners = mutableListOf<onTimerListener>()
+    private var mListeners = mutableListOf<OnTimerListener>()
 
     fun startTimer() {
-        mTimer.schedule(object : TimerTask() {
+        stopTimer()
+        mTimer = Timer()
+        mTimer?.schedule(object : TimerTask() {
             override fun run() {
                 second++
                 mListeners.forEach {
                     it.onTimer(second)
                 }
             }
-        }, 0, 995)
+        }, 0, 999)
     }
 
-    fun addListener(listener: onTimerListener) {
+    fun addListener(listener: OnTimerListener) {
         mListeners.add(listener)
     }
 
-    fun removeListener(listener: onTimerListener) {
+    fun removeListener(listener: OnTimerListener) {
         mListeners.remove(listener)
     }
 
     fun stopTimer() {
-        mTimer.cancel()
+        mTimer?.cancel()
         second = 0
     }
 
-    interface onTimerListener {
+    interface OnTimerListener {
         fun onTimer(second: Int)
     }
 

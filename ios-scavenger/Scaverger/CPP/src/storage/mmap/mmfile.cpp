@@ -30,10 +30,10 @@ void MMFile::initFile(string dir, string filename, int size) {
         //打开文件
         fstream fFile;
         fFile.open(file_path.c_str(), ios::out | ios::binary);
-        file_size = size == 0 ? 1024 * 256 : size;
-        char *buffer = new char[file_size];
-        memset(buffer, 0, file_size);
-        fFile.write(buffer, file_size);
+        f_size = size == 0 ? 1024 * 256 : size;
+        char *buffer = new char[f_size];
+        memset(buffer, 0, f_size);
+        fFile.write(buffer, f_size);
         fFile.close();
         delete[] buffer;
         //如果长度为0，写入256kb数据
@@ -84,25 +84,37 @@ void MMFile::write(string str) {
 
 void MMFile::append(string str) {
     reflection(false);
-    string temp = mmap_ptr;
-    unsigned int str_len = temp.size() + str.size();
+    unsigned int str_len = 0;
+    unsigned int offset = 0;
+    if (mmap_ptr != MAP_FAILED) {
+        offset = ::strlen(mmap_ptr);
+    }
+    str_len = offset + str.size();
     while (str_len > file_size) {
         dilatation();
         reflection(true);
     }
-    memcpy(mmap_ptr + temp.size(), str.c_str(), str.size());
+    memcpy(mmap_ptr + offset, str.c_str(), str.size());
     str.clear();
-    temp.clear();
 }
 
-void MMFile::close() {
+void MMFile::close(bool remove) {
     if (mmap_ptr != MAP_FAILED) {
         munmap(mmap_ptr, file_size);
-        mmap_ptr = nullptr;
-        file_size = 0;
+    }
+    mmap_ptr = nullptr;
+    file_size = 0;
+    if (remove && !file_path.empty()) {
+        ::remove(file_path.c_str());
     }
 }
 
 string MMFile::read() {
+    reflection(false);
+    if (mmap_ptr == nullptr || mmap_ptr == MAP_FAILED) {
+        return "";
+    }
+
     return {mmap_ptr};
 }
+

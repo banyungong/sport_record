@@ -6,7 +6,9 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Looper
 import androidx.core.app.ActivityCompat
+import com.gritti.scavenger.mock.MockLocation
 
 class LocationHandler constructor(context: Context) : LocationListener {
 
@@ -29,11 +31,14 @@ class LocationHandler constructor(context: Context) : LocationListener {
         ) {
             throw SecurityException("Location permission is not granted")
         }
+        if (Looper.myLooper() == null) {
+            Looper.prepare()
+        }
         mLocationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             1000,
             0.5f,
-            this
+            this,
         )
     }
 

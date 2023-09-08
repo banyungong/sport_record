@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="80dp"
-            android:text="0.0KM"
+            android:text="--KM"
             android:textColor="@color/black"
             android:textSize="54sp"
             android:textStyle="bold"
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="00:00:00"
+            android:text="--:--:--"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="—分/KM"
+            android:text="--"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="0步"
+            android:text="-Step"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="180步/分"
+            android:text="--/m"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="0大卡"
+            android:text="--Cal"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -87,40 +87,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="0米"
+            android:text="--m"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_speed" />
 
 
-        <Button
-            android:id="@+id/btn_pause_or_continue"
+        <LinearLayout
+            android:id="@+id/layout_controller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="32dp"
-            android:background="@color/teal_700"
-            android:padding="16dp"
-            android:text="暂停"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
             android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            >
+            <Button
+                android:id="@+id/btn_pause_or_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/teal_700"
+                android:padding="16dp"
+                android:text="暂停"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/teal_200"
+                android:padding="16dp"
+                android:text="结束"
+                android:layout_marginStart="32dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/btn_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
             android:padding="16dp"
             android:text="查看地图"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_pause_or_continue"
+            app:layout_constraintBottom_toTopOf="@+id/layout_controller"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

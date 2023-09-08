@@ -48,8 +48,12 @@ public:
     /**
      * 关闭数据映射
      */
-    void close();
+    void close(bool remove);
 
+    /**
+     * 读取数据
+     * @return
+     */
     string read();
 };
 

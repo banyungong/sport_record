@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import com.gritti.scavenger.R
 
 class ServiceNotification(context: Context) {
     companion object {
@@ -17,7 +18,7 @@ class ServiceNotification(context: Context) {
         const val NOTIFICATION_CHANNEL_ID = "scavenger_channel_id_01"
     }
 
-    private var notification: Notification? = null
+    var notification: Notification? = null
     private var notificationManager: NotificationManager? = null
     private var applicationContext: Context
 
@@ -54,11 +55,13 @@ class ServiceNotification(context: Context) {
         if (contentView != null) {
             builder.setCustomContentView(contentView)
         } else {
+            builder.setSmallIcon(R.mipmap.ic_launcher_round)
             builder.setContentTitle("Scavenger")
             builder.setContentText("Scavenger is running")
         }
         builder.priority = NotificationCompat.PRIORITY_HIGH
         builder.setOngoing(true)
+        notification = builder.build()
         this.notification
     }
 

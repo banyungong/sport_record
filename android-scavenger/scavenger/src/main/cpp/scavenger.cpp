@@ -39,17 +39,19 @@ jlongArray addPoint(JNIEnv *env, jobject thiz, jlong timestamp,
 
     ResultPoint *resultPoint = manager->addPoint(cPoint);
     recordService->addPoint(resultPoint);
-    jlongArray result = env->NewLongArray(9);
+    jlongArray result = env->NewLongArray(10);
     jlong *resultData = env->GetLongArrayElements(result, nullptr);
     resultData[0] = resultPoint->second;
     resultData[1] = resultPoint->latitude;
     resultData[2] = resultPoint->longitude;
-    resultData[3] = resultPoint->type;
-    resultData[4] = resultPoint->meter / 100;
-    resultData[5] = resultPoint->pace;
-    resultData[6] = resultPoint->step;
+    resultData[3] = resultPoint->pace;
+    resultData[4] = resultPoint->step;
+    resultData[5] = resultPoint->calorie;
+    resultData[6] = resultPoint->climb;
     resultData[7] = resultPoint->altitude;
-    resultData[8] = resultPoint->calorie;
+    resultData[8] = resultPoint->type;
+    resultData[9] = resultPoint->meter / 100;
+
 
     env->ReleaseLongArrayElements(result, resultData, 0);
     delete cPoint;
@@ -67,6 +69,7 @@ void config(JNIEnv *env, jobject thiz,
     recordService->setPath(dirChars, tagChars);
     env->ReleaseStringUTFChars(dir, dirChars);
     env->ReleaseStringUTFChars(tag, tagChars);
+    recordService->setFrequency(1);
 }
 
 jobjectArray pointRarefy(JNIEnv *env, jobject thiz,
@@ -124,7 +127,6 @@ jint sportResume(JNIEnv *env, jobject thiz) {
 }
 
 jint sportPause(JNIEnv *env, jobject thiz) {
-    manager->clean();
     return recordService->pause();
 }
 
@@ -157,7 +159,7 @@ jobject getRecord(JNIEnv *env, jobject thiz) {
     env->SetLongField(recordObject, endTimeField, record->end_time);
 
     jfieldID mileageField = env->GetFieldID(recordClass, "mileage", "I");
-    env->SetIntField(recordObject, mileageField, record->mileage);
+    env->SetIntField(recordObject, mileageField, record->mileage/100);
 
     jfieldID speedField = env->GetFieldID(recordClass, "speed", "I");
     env->SetIntField(recordObject, speedField, record->speed);
@@ -209,9 +211,6 @@ jobject getPointList(JNIEnv *env, jobject thiz) {
     return listObject;
 }
 
-}
-
-
 jint RegisterNatives(JNIEnv *env) {
     jclass clazz = env->FindClass("com/gritti/scavenger/ScavengerNative");
     if (clazz == nullptr) {
@@ -232,7 +231,10 @@ jint RegisterNatives(JNIEnv *env) {
     return env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0]));
 }
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+}
+
+
+jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env = nullptr;
     if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         return JNI_ERR;

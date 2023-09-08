@@ -41,11 +41,10 @@ public:
     int reset();
 
     /**
-     * 初始化跑步状态为Initialized
      * @param frequency 采样率
      * 只有当状态为Idle时才能调用
      */
-    int init(int frequency);
+    int setFrequency(int frequency);
 
     /**
      * 开始记录

@@ -10,7 +10,7 @@ class StepSensorHandler(context: Context) : SensorEventListener {
     private var mContext: Context = context
     private var sensorManager: SensorManager? = null
     private var stepCount: Int = 0
-    private var systemStepCount: Int = -1;
+    private var systemStepCount: Int = -1
 
 
     fun reset() {

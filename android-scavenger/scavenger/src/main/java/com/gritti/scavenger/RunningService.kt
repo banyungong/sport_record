@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
 import com.gritti.scavenger.controls.TimerControls
 import com.gritti.scavenger.notification.ServiceNotification
 
@@ -11,14 +12,10 @@ import com.gritti.scavenger.notification.ServiceNotification
  * 1、前台服务通知栏
  * 2、GPS数据采集
  */
-class RunningService : Service(), TimerControls.onTimerListener {
+class RunningService : Service() {
 
     private val serviceNotification: ServiceNotification by lazy {
         ServiceNotification(this)
-    }
-
-    private val timerControls: TimerControls by lazy {
-        TimerControls()
     }
 
     companion object {
@@ -49,19 +46,13 @@ class RunningService : Service(), TimerControls.onTimerListener {
         super.onCreate()
         //开启前台通知
         serviceNotification.startForegroundWithNotification(null)
-        timerControls.startTimer()
-        timerControls.addListener(this)
+
+        startForeground(ServiceNotification.NOTIFICATION_ID, serviceNotification.notification)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         serviceNotification.stopForegroundWithNotification()
-        timerControls.stopTimer()
-        timerControls.removeListener(this)
-    }
-
-    override fun onTimer(second: Int) {
-        val point = ScavengerManager.getInstance(this).addPoint()
     }
 
 }

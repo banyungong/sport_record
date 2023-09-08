@@ -11,8 +11,8 @@ ResultPoint *Manager::addPoint(CPoint *cPoint) {
     if (resultPoint->type == CPoint_TYPE::TYPE_NORMAL) {
         defaultCheatHandler->onHandler(point_list, cPoint, resultPoint);
     }
+    mileageHandler->onHandler(point_list, cPoint, resultPoint);
     if (resultPoint->type == 0) {
-        mileageHandler->onHandler(point_list, cPoint, resultPoint);
         paceHandler->onHandler(point_list, cPoint, resultPoint);
         climbHandler->onHandler(point_list, cPoint, resultPoint);
         calorieHandler->onHandler(point_list, cPoint, resultPoint);

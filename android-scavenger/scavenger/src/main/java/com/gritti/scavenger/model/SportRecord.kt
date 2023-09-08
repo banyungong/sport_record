@@ -82,5 +82,12 @@ class SportRecord() : Parcelable {
             return arrayOfNulls(size)
         }
     }
+}
 
+fun SportRecord.isRunning(): Boolean {
+    return status == 1
+}
+
+fun SportRecord.isPause(): Boolean {
+    return status == 2
 }

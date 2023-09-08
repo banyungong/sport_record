@@ -8,14 +8,13 @@
 using namespace std;
 
 void StorageHandler::init(string dir, string tag) {
-    string pointFileName = tag + "_point_list";
-    string recordFileName = tag + "_record";
+    pointFileName = tag + "_point_list";
+    recordFileName = tag + "_record";
+    fileDir = dir;
     pointMMFile->initFile(dir, pointFileName, FILE_SIZE);
     recordMMFile->initFile(dir, recordFileName, FILE_SIZE * 256);
     dir.clear();
     tag.clear();
-    pointFileName.clear();
-    recordFileName.clear();
 }
 
 list<ResultPoint> *StorageHandler::readPointList() {
@@ -51,16 +50,12 @@ void StorageHandler::writePoint(ResultPoint *point, bool force) {
             //point转为json
             string str = p.toJson();
             //写入文件
-            pointMMFile->append(str);
+            if (!str.empty()) {
+                pointMMFile->append(str);
+            }
         }
         point_list->clear();
     }
-}
-
-void StorageHandler::clean() {
-    point_list->clear();
-    pointMMFile->close();
-    recordMMFile->close();
 }
 
 void StorageHandler::writeRecord(CRecord *record) {
@@ -77,4 +72,11 @@ CRecord *StorageHandler::readRecord() {
     }
     str.clear();
     return record;
+}
+
+void StorageHandler::resetFile() {
+    point_list->clear();
+    pointMMFile->close(true);
+    pointMMFile->initFile(fileDir, pointFileName, FILE_SIZE);
+
 }

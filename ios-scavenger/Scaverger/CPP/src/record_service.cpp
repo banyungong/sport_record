@@ -3,32 +3,35 @@
 //
 
 #include "record_service.h"
+#include "android/log.h"
 
 int RecordService::reset() {
-    if (cRecord->status != RecordStatus::End && cRecord->status != RecordStatus::Idle &&
-        cRecord->status != RecordStatus::Initialized) {
+    if (cRecord->status != RecordStatus::End && cRecord->status != RecordStatus::Idle) {
         return -1;
     }
     cRecord->reset();
+    //删除坐标点文件
+    //重制记录文件
+    storageHandler->writeRecord(cRecord);
     return 0;
 }
 
-int RecordService::init(int f) {
+int RecordService::setFrequency(int f) {
     if (cRecord->status != RecordStatus::Idle) {
         return -1;
     }
     cRecord->frequency = f;
-    cRecord->status = RecordStatus::Initialized;
     storageHandler->writeRecord(cRecord);
     return 0;
 }
 
 int RecordService::start() {
-    if (cRecord->status != RecordStatus::Initialized) {
+    if (cRecord->status != RecordStatus::Idle) {
         return -1;
     }
     cRecord->start_time = time(NULL);
     cRecord->status = RecordStatus::Running;
+    storageHandler->writeRecord(cRecord);
     return 0;
 }
 
@@ -70,16 +73,19 @@ void *RecordService::addPoint(ResultPoint *resultPoint) {
     if (cRecord->status != RecordStatus::Running) {
         return nullptr;
     }
-    storageHandler->writePoint(resultPoint, false);
     cRecord->duration += cRecord->frequency;
     //计算跑步数据
     cRecord->mileage = resultPoint->meter;
-    cRecord->speed = 100000 / cRecord->mileage * cRecord->duration;
+    if (cRecord->mileage == 0 || cRecord->duration == 0) {
+        cRecord->speed = 0;
+    } else {
+        cRecord->speed = 100000.0 / cRecord->mileage * cRecord->duration;
+    }
     cRecord->step = resultPoint->step;
     cRecord->calorie = resultPoint->calorie;
     cRecord->climb = resultPoint->altitude;
     //计算公里节点
-    unsigned int nextKmNode = (cRecord->kmNodeList->size() + 1) * 100000;
+    int nextKmNode = (cRecord->kmNodeList->size() + 1) * 100000;
     if (cRecord->mileage >= nextKmNode) {
         auto *kmNode = new KmNode();
         kmNode->index = (cRecord->duration / cRecord->frequency) - 1;
@@ -91,6 +97,8 @@ void *RecordService::addPoint(ResultPoint *resultPoint) {
         cRecord->kmNodeList->push_back(*kmNode);
         delete kmNode;
     }
-    return resultPoint;
+    storageHandler->writePoint(resultPoint, false);
+    storageHandler->writeRecord(cRecord);
+    return nullptr;
 }
 

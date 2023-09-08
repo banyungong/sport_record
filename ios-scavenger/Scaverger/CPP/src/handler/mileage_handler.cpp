@@ -14,6 +14,11 @@ MileageHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, Result
         outPoint->meter = 0;
         return false;
     }
+    if (outPoint->type != 0) {
+        inPoint->meter = point_list->back().meter;
+        outPoint->meter = inPoint->meter;
+        return false;
+    }
 
     //获取前5s的点
     auto *list = new std::list<CPoint>();

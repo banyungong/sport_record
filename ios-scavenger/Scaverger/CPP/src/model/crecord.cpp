@@ -44,7 +44,7 @@ void CRecord::fromJson(const string &json) {
     Json::Reader reader;
     Json::Value root;
     if (reader.parse(json, root)) {
-        record_id = root["record_id"].asInt();
+        record_id = root["record_id"].asString();
         status = (RecordStatus) root["status"].asInt();
         duration = root["duration"].asInt();
         start_time = root["start_time"].asInt();

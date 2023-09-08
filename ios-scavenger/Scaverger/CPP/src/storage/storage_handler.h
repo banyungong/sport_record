@@ -20,8 +20,10 @@ class StorageHandler {
 private:
     MMFile *pointMMFile = new MMFile();
     MMFile *recordMMFile = new MMFile();
-
     list<ResultPoint> *point_list = new list<ResultPoint>;
+    string pointFileName;
+    string recordFileName;
+    string fileDir;
 public:
     /**
      * 初始化文件，如果文件不存在，会创建文件
@@ -50,8 +52,7 @@ public:
      */
     CRecord * readRecord();
 
-    void clean();
-
+    void resetFile();
 };
 
 

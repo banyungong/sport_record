@@ -1,19 +1,25 @@
 package com.gritti.scavenger.controls
 
 import com.gritti.scavenger.model.Option
+import com.gritti.scavenger.model.Point
+import com.gritti.scavenger.model.SportRecord
 
 interface IRecordControls {
-    fun config(option: Option)
+    suspend fun config(option: Option?): SportRecord
 
-    fun resetRecord()
+    suspend fun resetRecord(): Boolean
 
-    fun startRecord()
+    suspend fun startRecord(): Boolean
 
-    fun pauseRecord()
+    suspend fun pauseRecord(): Boolean
 
-    fun resumeRecord()
+    suspend fun resumeRecord(): Boolean
 
-    fun stopRecord()
+    suspend fun stopRecord(): Boolean
+
+    fun getSportRecord(): SportRecord
+
+    suspend fun pointRarefy(latlngs: Array<Point>): Array<Point>
 
     fun registerLifecycle(lifecycle: IRecordLifecycle)
 

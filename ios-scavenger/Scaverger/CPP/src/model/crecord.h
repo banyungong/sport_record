@@ -14,17 +14,15 @@ using namespace std;
 //Idle、Initialized、Running、Pause、End
 enum RecordStatus {
     Idle,//0
-    Initialized,//1
-    Running,//2
-    Pause,//3
-    End//4
+    Running,//1
+    Pause,//2
+    End//3
 };
-
 
 class CRecord {
 public:
     //记录id
-    string record_id = 0;
+    string record_id = "";
     //跑步状态
     RecordStatus status = Idle;
     //总耗时
