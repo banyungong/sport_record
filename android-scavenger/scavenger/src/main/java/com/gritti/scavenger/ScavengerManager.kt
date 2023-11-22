@@ -17,6 +17,7 @@ import com.gritti.scavenger.mock.MockLocation
 import com.gritti.scavenger.mock.MockManager
 import com.gritti.scavenger.model.Option
 import com.gritti.scavenger.model.SportRecord
+import com.gritti.scavenger.model.copySimpleRecord
 import com.gritti.scavenger.model.isPause
 import com.gritti.scavenger.model.isRunning
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -76,6 +77,7 @@ class ScavengerManager private constructor(context: Context) : IRecordControls,
         option.sportFileDir =
             context.filesDir?.absolutePath + File.separator + "scavenger" + File.separator
         mockManager.open = true
+        config()
     }
 
     private fun startWork() {
@@ -146,38 +148,28 @@ class ScavengerManager private constructor(context: Context) : IRecordControls,
             locationHandler?.lastLocation?.longitude ?: 0.0
         )
         Log.e("liruopeng", "meter:${point.meter} , type;${point.type}")
-
-        updateSportRecord()
+        updateSimpleSportRecord()
     }
 
-    private fun updateSportRecord() {
-        sportRecord =
-            scavengerNative.getRecord()
+    private fun updateSimpleSportRecord() {
+        sportRecord.copySimpleRecord(scavengerNative.getSimpleRecord())
         bindLifecycle.forEach {
             it.onUpdateRecord(sportRecord)
         }
     }
 
 
-    override suspend fun config(option: Option?): SportRecord {
-        return withSingleThreadContext {
-            if (option != null) {
-                this@ScavengerManager.option = option
-            }
-            scavengerNative.config(
-                this@ScavengerManager.option.trackSmoothIntensity,
-                this@ScavengerManager.option.antiCheatingIntensity,
-                this@ScavengerManager.option.sportFileDir,
-                this@ScavengerManager.option.sportTag
-            )
-            updateSportRecord()
-            if (sportRecord.isRunning() || sportRecord.isPause()) {
-                sportRecord.pointList = scavengerNative.getPointList()
-                RunningService.start(applicationContext)
-                if (sportRecord.isRunning())
-                    startWork()
-            }
-            sportRecord
+    private fun config() {
+        scavengerNative.config(
+            this@ScavengerManager.option.trackSmoothIntensity,
+            this@ScavengerManager.option.antiCheatingIntensity,
+            this@ScavengerManager.option.sportFileDir,
+        )
+        updateSimpleSportRecord()
+        if (sportRecord.isRunning() || sportRecord.isPause()) {
+            RunningService.start(applicationContext)
+            if (sportRecord.isRunning())
+                startWork()
         }
     }
 
@@ -232,7 +224,7 @@ class ScavengerManager private constructor(context: Context) : IRecordControls,
         return withSingleThreadContext {
             if (scavengerNative.sportResume() >= 0) {
                 startWork()
-                updateSportRecord()
+                updateSimpleSportRecord()
                 return@withSingleThreadContext true
             }
             false
@@ -245,6 +237,7 @@ class ScavengerManager private constructor(context: Context) : IRecordControls,
             if (scavengerNative.sportStop() >= 0) {
                 stopWork()
                 RunningService.stop(applicationContext)
+                // copy数据
                 return@withSingleThreadContext true
             }
             false
@@ -262,6 +255,16 @@ class ScavengerManager private constructor(context: Context) : IRecordControls,
 
     override fun getSportRecord(): SportRecord {
         return sportRecord
+    }
+
+    override suspend fun updateSportRecord(): SportRecord {
+        return withSingleThreadContext {
+            sportRecord = scavengerNative.getRecord()
+            bindLifecycle.forEach {
+                it.onUpdateRecord(sportRecord)
+            }
+            sportRecord
+        }
     }
 
     override suspend fun pointRarefy(latlngs: Array<Point>): Array<Point> {

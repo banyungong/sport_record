@@ -11,8 +11,8 @@ using namespace std;
 
 class KmNode {
 public:
-    unsigned int index = 0;
-    unsigned int duration = 0;//距离上个节点耗时
+    int index = 0;
+    int duration = 0;//距离上个节点耗时
     void fromJson(const string &json);
 
     string toJson() const;

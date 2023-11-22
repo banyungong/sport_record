@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 
 class RecordVM(application: Application) : BaseVM(application), IRecordLifecycle {
     val sportRecordLV = MutableLiveData<SportRecord>()
-    val pauseOrContinueLV = MutableLiveData<String>()
+    val isPauseLV = MutableLiveData<Boolean>()
 
     private val scavengerManager by lazy {
         ScavengerManager.getInstance(application)
@@ -31,9 +31,9 @@ class RecordVM(application: Application) : BaseVM(application), IRecordLifecycle
         sportRecordLV.value = scavengerManager.getSportRecord()
         sportRecordLV.value?.let {
             if (it.isRunning()) {
-                pauseOrContinueLV.value = "暂停"
+                isPauseLV.value = false
             } else if (it.isPause()) {
-                pauseOrContinueLV.value = "继续"
+                isPauseLV.value = true
             }
         }
     }
@@ -48,11 +48,12 @@ class RecordVM(application: Application) : BaseVM(application), IRecordLifecycle
         runMainThread {
             sportRecordLV.value?.let {
                 if (it.isRunning()) {
-                    if (scavengerManager.pauseRecord())
-                        pauseOrContinueLV.postValue("继续")
+                    if (scavengerManager.pauseRecord()) {
+                        isPauseLV.postValue(true)
+                    }
                 } else if (it.isPause()) {
                     if (scavengerManager.resumeRecord())
-                        pauseOrContinueLV.postValue("暂停")
+                        isPauseLV.postValue(false)
                 }
             }
         }
@@ -61,7 +62,8 @@ class RecordVM(application: Application) : BaseVM(application), IRecordLifecycle
     fun finishRecord() {
         runMainThread {
             if (scavengerManager.stopRecord()) {
-                finishRecord()
+                finishPage()
+
             }
         }
     }

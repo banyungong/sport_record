@@ -38,7 +38,7 @@ class SportRecord() : Parcelable {
     var pointList = ArrayList<Point>()
 
     //暂停点下标集合
-    var pausePointIndexList = ArrayList<Point>()
+    var pausePointIndexList = ArrayList<Int>()
 
     //公里节点
     var kmNodeList = ArrayList<KMNode>()
@@ -54,6 +54,7 @@ class SportRecord() : Parcelable {
         step = parcel.readInt()
         calorie = parcel.readInt()
         climb = parcel.readInt()
+
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -90,4 +91,16 @@ fun SportRecord.isRunning(): Boolean {
 
 fun SportRecord.isPause(): Boolean {
     return status == 2
+}
+
+fun SportRecord.copySimpleRecord(simpleRecord: SportRecord) {
+    status = simpleRecord.status
+    duration = simpleRecord.duration
+    startTime = simpleRecord.startTime
+    endTime = simpleRecord.endTime
+    mileage = simpleRecord.mileage
+    speed = simpleRecord.speed
+    step = simpleRecord.step
+    calorie = simpleRecord.calorie
+    climb = simpleRecord.climb
 }

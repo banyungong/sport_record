@@ -5,8 +5,6 @@ import com.gritti.scavenger.model.Point
 import com.gritti.scavenger.model.SportRecord
 
 interface IRecordControls {
-    suspend fun config(option: Option?): SportRecord
-
     suspend fun resetRecord(): Boolean
 
     suspend fun startRecord(): Boolean
@@ -18,6 +16,8 @@ interface IRecordControls {
     suspend fun stopRecord(): Boolean
 
     fun getSportRecord(): SportRecord
+
+    suspend fun updateSportRecord(): SportRecord
 
     suspend fun pointRarefy(latlngs: Array<Point>): Array<Point>
 

@@ -14,11 +14,9 @@ using namespace std;
 
 class RecordService {
 private:
-//    Timer *timer = new Timer();
     StorageHandler *storageHandler = new StorageHandler();
     //跑步数据处理
     CRecord *cRecord = new CRecord();
-
 
 public:
     CRecord *getCRecord() const {
@@ -29,8 +27,9 @@ public:
         return storageHandler->readPointList();
     }
 
-    void setPath(const string &dir, const string &tag) {
-        storageHandler->init(dir, tag);
+    void setPath(const string &dir) {
+        //
+        storageHandler->init(dir);
         cRecord = storageHandler->readRecord();
     }
 

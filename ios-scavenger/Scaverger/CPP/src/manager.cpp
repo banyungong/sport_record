@@ -19,6 +19,11 @@ ResultPoint *Manager::addPoint(CPoint *cPoint) {
     }
     resultPoint->longitude = cPoint->longitude;
     resultPoint->latitude = cPoint->latitude;
+    if (point_list->empty()) {
+        resultPoint->step = 0;
+    } else {
+        resultPoint->step = cPoint->step - point_list->back().step;
+    }
     point_list->push_back(*cPoint);
     //最多保留120个点
     if (point_list->size() > 120) {
@@ -94,3 +99,7 @@ void Manager::init(int kalman_intensity,
     }
     shakeCheatHandler->intensity = shake_intensity;
 }
+
+
+
+

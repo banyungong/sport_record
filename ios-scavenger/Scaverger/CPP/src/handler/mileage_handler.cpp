@@ -4,6 +4,7 @@
 
 #include "mileage_handler.h"
 #include "../utils/CoordinateUtils.h"
+#include "android/log.h"
 
 bool
 MileageHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, ResultPoint *outPoint) {
@@ -16,7 +17,7 @@ MileageHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, Result
     }
     if (outPoint->type != 0) {
         inPoint->meter = point_list->back().meter;
-        outPoint->meter = inPoint->meter;
+        outPoint->meter = 0;
         return false;
     }
 
@@ -31,7 +32,7 @@ MileageHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, Result
     //如果点数小于2，meter等于point_list的最后一个点的meter
     if (list->size() < 2) {
         inPoint->meter = point_list->back().meter;
-        outPoint->meter = inPoint->meter;
+        outPoint->meter = 0;
         list->clear();
         return false;
     }
@@ -45,9 +46,18 @@ MileageHandler::onHandler(std::list<CPoint> *point_list, CPoint *inPoint, Result
         int distance = CoordinateUtils::getDistance(inPoint, temp_point);
         inPoint->meter = (temp_point->meter + distance);
     } else {
-        inPoint->meter = temp_list->back().meter;
+        inPoint->meter = point_list->back().meter;
     }
-    outPoint->meter = inPoint->meter;
+    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "inPoint->meter：%d", inPoint->meter);
+    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "point_list->back().meter：%d", point_list->back().meter);
+    int pointMeter = inPoint->meter - point_list->back().meter;
+    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "pointMeter：%d",pointMeter);
+
+    if (pointMeter > 0) {
+        outPoint->meter = pointMeter;
+    } else {
+        outPoint->meter = 0;
+    }
     list->clear();
     temp_list->clear();
     return false;

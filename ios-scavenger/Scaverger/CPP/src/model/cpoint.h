@@ -42,9 +42,9 @@ public:
     int latitude;
     //经度，单位百万分之一度
     int longitude;
-    //累计步数
+    //步数
     int step;
-    //累计里程
+    //里程
     int meter;
     //水平精度，单位厘米
     int horizontalAccuracy;

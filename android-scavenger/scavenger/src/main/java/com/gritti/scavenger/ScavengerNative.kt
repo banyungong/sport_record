@@ -1,11 +1,12 @@
 package com.gritti.scavenger
 
+import com.gritti.scavenger.model.KMNode
 import com.gritti.scavenger.model.Point
 import com.gritti.scavenger.model.SportRecord
 
 class ScavengerNative {
 
-    companion object{
+    companion object {
         init {
             System.loadLibrary("scavenger")
         }
@@ -18,14 +19,14 @@ class ScavengerNative {
         stepCount: Int,
         gyroscope: Array<LongArray>
     ): LongArray
+
     /**
      * 配置参数
      * @param trackSmoothIntensity 平滑优化参数
      * @param antiCheatingIntensity 防作弊强度
      * @param dir 运动数据存储目录
-     * @param tag 运动数据标签
      */
-    external fun config(trackSmoothIntensity: Int, antiCheatingIntensity: Int,dir: String, tag: String)
+    external fun config(trackSmoothIntensity: Int, antiCheatingIntensity: Int, dir: String)
 
     /**
      * 重置运动数据
@@ -66,6 +67,12 @@ class ScavengerNative {
      * 给定坐标集合，抽稀出关键点
      */
     external fun pointRarefy(latlngs: Array<IntArray>): Array<IntArray>
+
+    external fun getSimpleRecord(): SportRecord
+
+    external fun getPauseList():ArrayList<Int>
+
+    external fun getKmNodeList():ArrayList<KMNode>
 
 
 }

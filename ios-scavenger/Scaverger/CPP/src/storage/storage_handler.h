@@ -6,7 +6,8 @@
 #define ANDROID_SCAVENGER_STORAGE_HANDLER_H
 
 #define FILE_SIZE 1024
-#define FILE_NAME "scavenger"
+#define POINT_NAME "point_list"
+#define RECORD_NAME "record"
 
 #include "string"
 #include "list"
@@ -21,8 +22,6 @@ private:
     MMFile *pointMMFile = new MMFile();
     MMFile *recordMMFile = new MMFile();
     list<ResultPoint> *point_list = new list<ResultPoint>;
-    string pointFileName;
-    string recordFileName;
     string fileDir;
 public:
     /**
@@ -31,7 +30,7 @@ public:
      * @param tag 文件标识
      * @return
      */
-    void init(string dir, string tag);
+    void init(string dir);
 
 
     void writePoint(ResultPoint *point, bool force);
@@ -52,7 +51,7 @@ public:
      */
     CRecord * readRecord();
 
-    void resetFile();
+    void resetFile(CRecord *record);
 };
 
 

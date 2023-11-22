@@ -5,14 +5,12 @@ import android.os.Parcelable
 
 class Option() : Parcelable {
     var sportFileDir: String = ""
-    var sportTag = "scavenger"
     var trackSmoothIntensity = 3
     var antiCheatingIntensity = 3
     var autoLocation = true
 
     constructor(parcel: Parcel) : this() {
         sportFileDir = parcel.readString().toString()
-        sportTag = parcel.readString().toString()
         trackSmoothIntensity = parcel.readInt()
         antiCheatingIntensity = parcel.readInt()
         autoLocation = parcel.readByte() != 0.toByte()
@@ -24,7 +22,6 @@ class Option() : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(sportFileDir)
-        dest.writeString(sportTag)
         dest.writeInt(trackSmoothIntensity)
         dest.writeInt(antiCheatingIntensity)
         dest.writeInt(if (autoLocation) 1 else 0)

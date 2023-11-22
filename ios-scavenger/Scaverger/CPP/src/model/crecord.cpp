@@ -62,7 +62,7 @@ void CRecord::fromJson(const string &json) {
         Json::Value kmNodeListJson = root["kmNodeList"];
         for (int i = 0; i < kmNodeListJson.size(); i++) {
             KmNode kmNode;
-            kmNode.fromJson(kmNodeListJson[i].toStyledString());
+            kmNode.fromJson(kmNodeListJson[i].asString());
             kmNodeList->push_back(kmNode);
         }
         kmNodeListJson.clear();

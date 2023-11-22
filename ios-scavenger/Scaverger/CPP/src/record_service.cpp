@@ -10,9 +10,7 @@ int RecordService::reset() {
         return -1;
     }
     cRecord->reset();
-    //删除坐标点文件
-    //重制记录文件
-    storageHandler->writeRecord(cRecord);
+    storageHandler->resetFile(cRecord);
     return 0;
 }
 
@@ -70,35 +68,36 @@ int RecordService::stop() {
 }
 
 void *RecordService::addPoint(ResultPoint *resultPoint) {
-    if (cRecord->status != RecordStatus::Running) {
-        return nullptr;
-    }
-    cRecord->duration += cRecord->frequency;
-    //计算跑步数据
-    cRecord->mileage = resultPoint->meter;
-    if (cRecord->mileage == 0 || cRecord->duration == 0) {
-        cRecord->speed = 0;
-    } else {
-        cRecord->speed = 100000.0 / cRecord->mileage * cRecord->duration;
-    }
-    cRecord->step = resultPoint->step;
-    cRecord->calorie = resultPoint->calorie;
-    cRecord->climb = resultPoint->altitude;
-    //计算公里节点
-    int nextKmNode = (cRecord->kmNodeList->size() + 1) * 100000;
-    if (cRecord->mileage >= nextKmNode) {
-        auto *kmNode = new KmNode();
-        kmNode->index = (cRecord->duration / cRecord->frequency) - 1;
-        unsigned int lastKmNodeDuration = 0;
-        if (!cRecord->kmNodeList->empty()) {
-            lastKmNodeDuration = cRecord->kmNodeList->back().duration;
+    if (cRecord->status == RecordStatus::Running) {
+        cRecord->duration += cRecord->frequency;
+        resultPoint->second = cRecord->duration;
+        //计算跑步数据
+        cRecord->mileage += resultPoint->meter;
+        if (cRecord->mileage == 0 || cRecord->duration == 0) {
+            cRecord->speed = 0;
+        } else {
+            cRecord->speed = 100000.0 / cRecord->mileage * cRecord->duration;
         }
-        kmNode->duration = cRecord->duration - lastKmNodeDuration;
-        cRecord->kmNodeList->push_back(*kmNode);
-        delete kmNode;
+        cRecord->step += resultPoint->step;
+        cRecord->calorie = resultPoint->calorie;
+        cRecord->climb = resultPoint->altitude;
+        //计算公里节点
+        int nextKmNode = (cRecord->kmNodeList->size() + 1) * 100000;
+        if (cRecord->mileage >= nextKmNode) {
+            auto *kmNode = new KmNode();
+            kmNode->index = (cRecord->duration / cRecord->frequency) - 1;
+            unsigned int lastKmNodeDuration = 0;
+            if (!cRecord->kmNodeList->empty()) {
+                lastKmNodeDuration = cRecord->kmNodeList->back().duration;
+            }
+            kmNode->duration = cRecord->duration - lastKmNodeDuration;
+            cRecord->kmNodeList->push_back(*kmNode);
+            delete kmNode;
+        }
+        storageHandler->writePoint(resultPoint, false);
+        storageHandler->writeRecord(cRecord);
     }
-    storageHandler->writePoint(resultPoint, false);
-    storageHandler->writeRecord(cRecord);
+
     return nullptr;
 }
 

@@ -19,7 +19,7 @@ PathSmoothTool::reduceNoisePoint(std::list<CPoint> *inPoints, float threshold) {
         CPoint *currentPoint = &(*it);
         CPoint *nextPoint = &(*++it);
         double distance = calculateDistanceFromPoint(currentPoint, lastPoint, nextPoint);
-        __android_log_print(ANDROID_LOG_INFO, "liruopeng", "distance：%f", distance);
+//        __android_log_print(ANDROID_LOG_INFO, "liruopeng", "distance：%f", distance);
         if (distance >= 0.1 && distance < threshold) {
             outPoints->push_back(*currentPoint);
         }
@@ -29,7 +29,7 @@ PathSmoothTool::reduceNoisePoint(std::list<CPoint> *inPoints, float threshold) {
         }
     }
     outPoints->push_back(inPoints->back());
-    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "outPoints length：%d", outPoints->size());
+//    __android_log_print(ANDROID_LOG_INFO, "liruopeng", "outPoints length：%d", outPoints->size());
     inPoints->clear();
     return outPoints;
 }

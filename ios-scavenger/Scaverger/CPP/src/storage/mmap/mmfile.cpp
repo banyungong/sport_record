@@ -45,9 +45,9 @@ void MMFile::initFile(string dir, string filename, int size) {
 void MMFile::dilatation() {
     //打开文件
     ofstream oFile;
-    oFile.open(file_path.c_str(), ios::out | ios::binary);
+    oFile.open(file_path.c_str(),  ios::binary | ios::app);
     //移动到文件末尾
-    oFile.seekp(file_size, ios::beg);
+//    oFile.seekp(file_size, ios::end);
     //追加写入file_size大小的数据
     char *buffer = new char[file_size];
     memset(buffer, 0, file_size);
@@ -58,7 +58,11 @@ void MMFile::dilatation() {
 }
 
 void MMFile::reflection(bool force) {
-    if (mmap_ptr == nullptr || force) {
+    if (force && mmap_ptr != nullptr) {
+        munmap(mmap_ptr, file_size);
+        mmap_ptr = nullptr;
+    }
+    if (mmap_ptr == nullptr) {
         int fd = open(file_path.c_str(), O_RDWR);
         if (fd == -1) {
             return;

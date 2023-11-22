@@ -19,6 +19,7 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
     }
 
     override fun initView() {
+        viewModel.checkRecordStatus()
         dataBinding?.apply {
             startRecord.setOnClickListener {
                 if (requestSportPermissions()) {
@@ -26,7 +27,6 @@ class MainActivity : BaseActivity<MainVM, ActivityMainBinding>() {
                 }
             }
         }
-        viewModel.checkRecordStatus()
     }
 
     private fun requestSportPermissions(): Boolean {

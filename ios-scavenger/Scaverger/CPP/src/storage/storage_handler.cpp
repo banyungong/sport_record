@@ -7,24 +7,21 @@
 
 using namespace std;
 
-void StorageHandler::init(string dir, string tag) {
-    pointFileName = tag + "_point_list";
-    recordFileName = tag + "_record";
+void StorageHandler::init(string dir) {
     fileDir = dir;
-    pointMMFile->initFile(dir, pointFileName, FILE_SIZE);
-    recordMMFile->initFile(dir, recordFileName, FILE_SIZE * 256);
+    pointMMFile->initFile(dir, POINT_NAME, FILE_SIZE * 1024 * 5);
+    recordMMFile->initFile(dir, RECORD_NAME, FILE_SIZE * 4);
     dir.clear();
-    tag.clear();
 }
 
 list<ResultPoint> *StorageHandler::readPointList() {
     string str = pointMMFile->read();
+    str = str.substr(0, str.length() - 1);
+    str = "[" + str + "]";
     auto *result_point_list = new list<ResultPoint>;
     if (!str.empty()) {
-        str = "[" + str + "]";
         Json::Reader reader;
-        Json::Value root;
-        root.clear();
+        Json::Value root(Json::arrayValue);
         if (reader.parse(str, root)) {
             for (int i = 0; i < root.size(); i++) {
                 ResultPoint point;
@@ -48,7 +45,7 @@ void StorageHandler::writePoint(ResultPoint *point, bool force) {
     if (point_list->size() >= 5 || force) {
         for (auto &p: *point_list) {
             //point转为json
-            string str = p.toJson();
+            string str = p.toJson() + ",";
             //写入文件
             if (!str.empty()) {
                 pointMMFile->append(str);
@@ -74,9 +71,10 @@ CRecord *StorageHandler::readRecord() {
     return record;
 }
 
-void StorageHandler::resetFile() {
+void StorageHandler::resetFile(CRecord *record) {
     point_list->clear();
     pointMMFile->close(true);
-    pointMMFile->initFile(fileDir, pointFileName, FILE_SIZE);
-
+    pointMMFile->initFile(fileDir, POINT_NAME, FILE_SIZE * 1024 * 5);
+    record->reset();
+    writeRecord(record);
 }
